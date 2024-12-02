@@ -1,0 +1,101 @@
+﻿@model List<Book>;
+<h1>Books Panel</h1>
+
+<div class="d-flex gap-2">
+    <a asp-controller="Books" asp-action="Create" class="btn btn-primary">Create New Book</a>
+
+    <form class="d-flex ms-auto gap-2" asp-action="Filter" ms-auto>
+
+        <select name="categoryId" asp-items=ViewBag.Categories id="inputState" class="form-select">
+            <option selected>All Categories</option>
+        </select>
+
+        <button type="submit" class="btn btn-secondary">Filter</button>
+    </form>
+</div>
+
+
+<table id="book-table" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Discount</th>
+            <th scope="col">Year</th>
+            <th scope="col">Category</th>
+            <th scope="col">Author</th>
+            <th scope="col">Status</th>            
+            <th scope="col">Quantity</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr class="align-middle">
+
+                <th scope="row">@i.Id</th>
+                <td>
+                    <img height="45" src="@i.ImageUrl" alt="Book Image" />
+                </td>
+                <td>
+                    @i.Name
+                    @if (i.Discount > 0)
+                    {
+                        <span class="badge bg-primary">SALE</span>
+                    }
+                </td>
+                <td>
+                    @if (i.Discount > 0)
+                    {
+                        <del class="small">@(i.Price)грн</del>
+
+                        <br />
+
+                    }
+                    @(i.Price - (i.Price * i.Discount / 100M))грн
+                </td>                
+                <td>@i.Discount%</td>
+                @*<td>
+                    @if (i.InStock)
+                    {
+                        <span class="badge bg-success">In Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Out of Stock</span>
+                    }
+                </td>  *@              
+                <td>@i.Year</td>
+                <td>@(i.Category?.Name ?? "not loaded")</td>
+                <td>@(i.Author?.Name ?? "not loaded")</td>
+                <td>
+                    @if (i.InStock)
+                    {
+                        <span class="badge bg-success">In Stock</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Out of Stock</span>
+                    }
+                </td>
+                <td>@i.Quantity</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary">
+                            <i class="bi bi-info-circle-fill"></i>
+                        </button>
+                        <a asp-action="Edit" asp-route-id="@i.Id" type="button" class="btn btn-warning">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@i.Id" class="btn btn-danger">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

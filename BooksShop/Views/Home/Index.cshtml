@@ -1,0 +1,58 @@
+﻿@model List<Book>
+    
+<div class="text-center my-3">
+    <h1 class="display-4 my-2">Welcome to Book Catalog</h1>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var i in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img height="240" src="@i.ImageUrl" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@i.Name</h5>
+                        <p class="card-text">@i.Author?.Name</p>
+                        <p class="card-text">@(i.Price)грн</p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <input id="quantityInput_@i.Id" style="width: 100px" type="number" min="1" value="1" class="form-control">
+                        <small class="text-muted">
+                            <a data-book-id="@i.Id" class="btn btn-primary">Add to Cart</a>
+                            @*<a asp-controller="Cart" asp-action="Append" asp-route-id="@i.Id" asp-route-count="@count" class="btn btn-primary">Add to Cart</a>*@
+                        </small>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('.btn-primary').click(function() {
+                var bookId = $(this).data('book-id');
+                var quantity = $('#quantityInput_' + bookId).val();
+
+                // Формуємо URL з параметрами id книги та кількості
+                var url = '@Url.Action("Append", "Cart")' + '?id=' + bookId + '&count=' + quantity;
+
+                // Перенаправлення на сторінку кошика з параметрами
+                window.location.href = url;
+            });
+        });
+    </script>
+}
+@*@section Scripts {
+    <script>
+        const input = document.getElementById("inputCount");
+        input.onchange = onInputCount;
+
+        function onInputCount(e) {
+            const value = e.target.value;
+            console.log(value);
+            //@count = value;
+        }
+    </script>
+}
+id="@("inputCount" + i.Id.ToString())"
+*@

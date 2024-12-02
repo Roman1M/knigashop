@@ -1,0 +1,65 @@
+﻿@model List<BookCartModel>
+@{
+    decimal totalPrice = Model.Sum(x => x.Price * x.CountToBuy);
+    bool isEmpty = !Model.Any();
+}
+
+<div class="card text-center">
+    <div class="card-header">
+        My Cart 
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Book List</h5>
+       
+        @if(isEmpty)
+        {
+            <p>Your cart is empty</p>
+        }
+
+        <ol class="list-group">
+            @foreach (var i in Model)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto d-flex align-items-center">
+                        <div>
+                            <a asp-action="Remove" asp-route-id="@i.Id" class="text-danger small cart-item-delete-button">
+                                <i class="bi bi-x-square-fill"></i>
+                            </a>
+                        </div>
+                        <div>
+                            <img height="50" src="@i.ImageUrl" alt="@i.Name"/>
+                        </div>
+                        <div>
+                            <div class="fw-bold">
+                                @i.Name
+                                @if (i.Discount > 0)
+                                {
+                                    <span class="badge bg-primary">SALE</span>
+                                }
+                            </div>                            
+                        </div>
+                        @*<span class="badge bg-primary rounded-pill">@(i.CountToBuy)шт</span>*@
+                    </div>
+                    <div>
+                        <a><i class="btn bi bi-dash"></i></a>
+                        <span class="badge bg-secondary rounded-pill">@(i.CountToBuy)шт</span>
+                        <a asp-controller="Cart" asp-action="Append" asp-route-id="@i.Id" asp-route-returnUrl="@Context.Request.Path"><i class="btn bi bi-plus"></i></a>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">@(i.Price * i.CountToBuy) грн</span>
+                </li>
+            }
+        </ol>
+        <div class="text-end mt-2">
+            <a asp-action="Clear" hidden="@isEmpty" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-x-square-fill"></i>
+                <span>Clear Cart</span>
+            </a>
+        </div>
+
+        <a href="#" hidden="@isEmpty" class="btn btn-success mt-3">Confirm Order</a>
+        <a asp-controller="Home" class="btn btn-outline-primary mt-3">Continue Shopping</a>
+    </div>
+    <div class="card-footer text-muted">
+        Total Price: <span class="badge bg-primary">@(totalPrice) грн</span>
+    </div>
+</div>

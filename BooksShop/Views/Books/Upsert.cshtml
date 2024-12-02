@@ -1,0 +1,79 @@
+﻿@model BookFormModel;
+@{
+    bool isCreate = ViewBag.Creation ?? false;
+}
+<h2>@(isCreate ? "Додати" : "Змінити") книгу</h2>
+
+<form class="row g-3" asp-action="@(isCreate ? "Create" : "Edit")" method="post">
+    <div class="col-md-12">
+        <label asp-for=Name class="form-label">Name</label>
+        <input asp-for="Name" type="text" class="form-control" placeholder="Enter book name">
+        <span asp-validation-for=Name class="small text-danger"></span>
+    </div>
+    <div class="col-md-8">
+        <label asp-for=Price class="form-label">Price</label>
+        <div class="input-group">
+            <span class="input-group-text">грн</span>
+            <input asp-for=Price type="number" min="0" step="0.01" class="form-control" placeholder="Enter book price">
+        </div>
+        <span asp-validation-for=Price class="small text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for=Discount class="form-label">Discount</label>
+        <div class="input-group">
+            <span class="input-group-text">%</span>
+            <input asp-for=Discount type="number" min="0" max="100" class="form-control" placeholder="Enter book discount">
+        </div>
+        <span asp-validation-for=Discount class="small text-danger"></span>
+    </div>
+
+    <div class="col-md-8">
+        <label asp-for=ImageUrl for="inputEmail4" class="form-label">Image URL</label>
+        <input asp-for=ImageUrl type="url" class="form-control" placeholder="Enter book image address" id="inputEmail4">
+        <span asp-validation-for=ImageUrl class="small text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for=Year class="form-label">Year</label>
+        <div class="input-group">
+            <span class="input-group-text"></span>
+            <input asp-for=Year type="number" min="1900" class="form-control" placeholder="Enter book year">
+        </div>
+        <span asp-validation-for=Year class="small text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="CategoryId" for="inputState" class="form-label">Category</label>
+        <select asp-for="CategoryId" asp-items=ViewBag.Categories id="inputState" class="form-select">
+            <option selected>Choose...</option>
+        </select>
+        <span asp-validation-for=CategoryId class="small text-danger"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="AuthorId" for="inputState" class="form-label">Author</label>
+        <select asp-for="AuthorId" asp-items=ViewBag.Authors id="inputState" class="form-select">
+            <option selected>Choose...</option>
+        </select>
+        <span asp-validation-for=AuthorId class="small text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for=Quantity class="form-label">Quantity</label>
+        <div class="input-group">
+            <span class="input-group-text">шт</span>
+            <input asp-for=Quantity type="number" min="0" class="form-control" placeholder="Enter book quantity">
+        </div>
+        <span asp-validation-for=Quantity class="small text-danger"></span>
+    </div>
+    <div class="col-6">
+        <a asp-action="Index" class="btn btn-dark w-100">Go Back</a>
+    </div>
+    <div class="col-6">
+        @if (isCreate)
+        {
+            <button type="submit" class="btn btn-success w-100">Create</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-warning w-100">Edit</button>
+        }
+    </div>
+</form>
